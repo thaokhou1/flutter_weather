@@ -5,14 +5,14 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_weather/main.dart';
+// import 'package:flutter_weather/main.dart';
 
-void main() {
-  test('location woeid is 2487956 ',(){
-    final woeid = fetchLocation();
-    final result =  woeid.('2487956');
-    expect(result,2487956, reason: 'should be exactlu');
-  });
+// void main() {
+//   test('location woeid is 2487956 ',(){
+//     final woeid = fetchLocation();
+//     final result =  woeid.('2487956');
+//     expect(result,2487956, reason: 'should be exactlu');
+//   });

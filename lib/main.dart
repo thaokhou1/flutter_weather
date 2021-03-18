@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/weather/forecaseElement.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -72,165 +73,104 @@ class _WeatherAppState extends State<WeatherApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(),
-      debugShowCheckedModeBanner: false,
-      home: Container(
-          child: temperature == null
-              ? Center(child: CircularProgressIndicator())
-              : Scaffold(
-                  backgroundColor: Colors.white,
-                  appBar: AppBar(
-                    centerTitle: false,
-                    titleSpacing: 20,
-                    title: Text(
-                      location,
-                      style: TextStyle(color: Colors.black, fontSize: 15.0),
+        theme: ThemeData.light(),
+        debugShowCheckedModeBanner: false,
+        home: Container(
+            child: temperature == null
+                ? Center(child: CircularProgressIndicator())
+                : Container(
+                    child: Stack(children: <Widget>[
+                    Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(35),
+                            bottomRight: Radius.circular(35)),
+                      ),
                     ),
-                    backgroundColor: Colors.white,
-                    elevation: 0.0,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.refresh_sharp,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          // doesn't load atm
-                        },
-                      )
-                    ],
-                  ),
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Stack(children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
-                          child: Image.network(
-                            'https://www.metaweather.com/static/img/weather/png/' +
-                                abbreviation +
-                                '.png',
-                            width: 100,
-                          ),
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Column(children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 250, 0),
-                                child: Text(
-                                  weatherDescription,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 60.0),
-                                ),
-                              )
-                            ]),
-                            Column(children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 250, 0),
-                                child: Text(
-                                  temperature.toString() + ' °',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 60.0),
-                                ),
-                              ),
-                            ])
-                          ],
-                        ),
-                      ]),
-                      Column(
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 30, 0, 0),
+                      child: Text(
+                        location,
+                        style: TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Colors.black,
+                            fontSize: 15.0),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(340, 30, 0, 0),
+                      child: Icon(
+                        Icons.refresh_sharp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          for (var i = 0; i < 7; i++)
-                            forecastElement(
-                                i + 1,
-                                abbreviationForecast[i],
-                                minTemperatureForecast[i],
-                                maxTemperatureForecast[i],
-                                humidityForecast[i]),
+                          Stack(children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(250, 80, 0, 60),
+                              child: Image.network(
+                                'https://www.metaweather.com/static/img/weather/png/' +
+                                    abbreviation +
+                                    '.png',
+                                width: 100,
+                              ),
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Column(children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 80, 250, 0),
+                                    child: Text(
+                                      weatherDescription,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          color: Colors.black,
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ]),
+                                Column(children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 10, 250, 0),
+                                    child: Text(
+                                      temperature.toString() + ' °',
+                                      style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          color: Colors.black,
+                                          fontSize: 35.0),
+                                    ),
+                                  ),
+                                ])
+                              ],
+                            ),
+                          ]),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: <Widget>[
+                                  for (var i = 0; i < 7; i++)
+                                    forecastElement(
+                                        i + 1,
+                                        abbreviationForecast[i],
+                                        minTemperatureForecast[i],
+                                        maxTemperatureForecast[i],
+                                        humidityForecast[i]),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ],
-                  ),
-                )),
-    );
+                    ),
+                  ]))));
   }
-}
-
-Widget forecastElement(daysFromNow, abbreviation, minTemperature,
-    maxTemperature, humidityForecast) {
-  var now = new DateTime.now();
-  var oneDayFromNow = now.add(new Duration(days: daysFromNow));
-  return Padding(
-    padding: const EdgeInsets.all(5),
-    child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey, offset: Offset(2.0, 2.0), blurRadius: 6.0)
-            ]),
-        child: Padding(
-          padding: const EdgeInsets.all(9.0),
-          child: Row(
-            children: <Widget>[
-              Column(children: <Widget>[
-                Text(
-                  DateFormat.EEEE().format(oneDayFromNow),
-                  // textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  DateFormat.MMMd().format(oneDayFromNow),
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.black, fontSize: 15),
-                ),
-              ]),
-              Flexible(fit: FlexFit.tight, child: SizedBox(width: 20.0)),
-              Padding(
-                padding: EdgeInsets.fromLTRB(80, 0, 5, 0),
-                child: Image.network(
-                  'https://www.metaweather.com/static/img/weather/png/' +
-                      abbreviation +
-                      '.png',
-                  width: 35,
-                ),
-              ),
-              Flexible(fit: FlexFit.tight, child: SizedBox(width: 60.0)),
-              Text(
-                maxTemperature.toString() + ' °',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              Flexible(fit: FlexFit.loose, child: SizedBox(width: 7.0)),
-              Text(
-                minTemperature.toString() + ' °',
-                style: TextStyle(color: Colors.grey, fontSize: 17.0),
-              ),
-              Flexible(fit: FlexFit.tight, child: SizedBox(width: 50.0)),
-              Padding(
-                padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                child: Text(
-                  humidityForecast.toString() + ' %',
-                  style: TextStyle(color: Colors.black, fontSize: 10.0),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 3, 0),
-                child: Image(
-                  image: AssetImage('images/down.png'),
-                ),
-              )
-            ],
-          ),
-        )),
-  );
 }
