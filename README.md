@@ -15,3 +15,6 @@ Steps to get the development environment running.
 1.Download this project.
 2.In Terminal run 'flutter pub get'
 3.Select Device and run 'flutter run'
+
+## Resources
+https://www.metaweather.com/api/
