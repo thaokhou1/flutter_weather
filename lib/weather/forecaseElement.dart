@@ -19,8 +19,8 @@ Widget forecastElement(daysFromNow, abbreviation, minTemperature,
                     boxShadow: [
                       BoxShadow(
                           color: Colors.grey,
-                          offset: Offset(2.0, 2.0),
-                          blurRadius: 6.0)
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 3.0)
                     ]),
                 child: Padding(
                   padding: const EdgeInsets.all(9.0),
